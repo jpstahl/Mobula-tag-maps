@@ -38,7 +38,7 @@ library(cowplot) #for insert map
 ###Register google key 
 Email gis.community@noaa.gov for your own API key. Use code register_google(key = "Your key"). 
 ```{r include=FALSE, warning=FALSE}
-register_google(key = "AIzaSyDQHwjzb05LsF1meZ1V4NfZc61GH9u4dc0") 
+register_google(key = "") 
 #got error message when devtools didn't install so had to restart R and then install.
 ```
 ### Import map of Pacific centered on Hawaii.
