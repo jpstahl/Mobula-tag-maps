@@ -111,7 +111,6 @@ tagpaths
 ggsave("mobula_tag_map_by_species_paths_only.jpg") 
 ```
 
-
 ##Add map elements
 ###In ggspatial you can add a scale bar and map arrow.Need to work on scale bar.
 ggplot() + 
