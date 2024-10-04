@@ -172,21 +172,5 @@ ggsave("Thurstoni_path.jpg")
 
 #This adds the release locations as points.
 #Thurstoni_path <- HIbasemap + geom_point(data = Thurstoni, aes(Deploy_long, Deploy_lat), colour = "yellow") + geom_segment(aes(x = Deploy_long, y = Deploy_lat, xend = Popoff_long, yend = Popoff_lat, colour = Tag_ID), arrow = arrow(angle = 30, length = unit(0.2, "cm"), ends = "last", type = "open"), data =Thurstoni)
-
-```
-
-#Distance between 2 points. Was having trouble with this so used NOAA online calculator.
-https://www.nhc.noaa.gov/gccalc.shtml
-```{r}
-#pointDistance(c(17.495,-163.0605), c(36.3941,176.9806), lonlat=TRUE) #can't figure out the package this goes to. 
-
-library ("geosphere") 
-#getting error when run this. 
-#answer in meters.
-
-#distm (c(17.495,-163.0605), c(36.3941,176.9806), fun = distGeo) #manta
-#distm (c(28.94295,-156.089), c(22.5146,-157.712), fun = distGeo)#tarapacana
-#distm (c(12.01667, -169.267), c(14.6846, -171.5294), fun = distGeo)#thurstoni, 22P0709, 234821
-#distm (c(16.01667, -158.600), c(16.9736, -150.9331), fun = distGeo)#thurstoni, 22P0707, 234820
 ```
 
