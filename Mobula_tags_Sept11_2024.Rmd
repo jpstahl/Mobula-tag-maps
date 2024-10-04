@@ -10,17 +10,17 @@ output:
 Choose the California cran mirror "51" to install packages. 
 Install ggmap to download google maps, ggplot2 to plot google maps with points, lines, and polygons, etc., and tidyverse to glimpse data.
 ```{r message=FALSE, warning=FALSE}
-chooseCRANmirror(ind=51) 
-install.packages("ggmap") 
-install.packages("ggplot2") 
-install.packages("tidyverse") 
-install.packages("devtools")
-devtools::install_github("dkahle/ggmap")
+#chooseCRANmirror(ind=51) 
+#install.packages("ggmap") 
+#install.packages("ggplot2") 
+#install.packages("tidyverse") 
+#install.packages("devtools")
+#devtools::install_github("dkahle/ggmap")
 #install.packages ("rgdal") #package to read shapefile.
-install.packages ("sf") #package to read shapefile.
-install.packages("ggsn")#package for north arrow.
-install.packages("cowplot")#cowplot is an add-in to ggplot
-install.packages("ggspatial")
+#install.packages ("sf") #package to read shapefile.
+#install.packages("ggsn")#package for north arrow.
+#install.packages("cowplot")#cowplot is an add-in to ggplot
+#install.packages("ggspatial")
 ```
 
 ```{r message=FALSE, warning=FALSE}
@@ -36,8 +36,10 @@ library(cowplot) #for insert map
 ```
 ## Get base maps
 ###Register google key 
+
 ```{r include=FALSE, warning=FALSE}
-register_google(key = "") 
+map_key <-read.csv(file="C:/R_git_stuff/Mobula-tag-maps/Map_key.csv", header=TRUE, sep=",")
+register_google(key = map_key$Key) 
 ```
 ### Import map of Pacific centered on Hawaii.
 ```{r import Pacific map}
