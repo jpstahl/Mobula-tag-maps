@@ -118,6 +118,7 @@ geom_sf(data=nc) + #I think this does something with coordinate system.
 annotation_scale(location = "tl") +  #'tr' here stands for top right and is the placement on the figure of the scale bar. bl, tl etc. work as well. 
 annotation_north_arrow(location = "br", which_north = "true") # this is the arrow, and you can pick your placement and style too I believe. 
 
+###north arrow
 ```{r}
 #adds north arrow. 
 tag_map_with_elements <- tagpaths + annotation_north_arrow(location = "bl", which_north = "true")
@@ -126,7 +127,7 @@ ggsave("mobula_tag_map_July29_2024.jpg")
 #help(annotation_north_arrow)
 ```
 
-#get error with scale bar code
+###get error with scale bar code
 ```{r}
 #tag_map_with_elements <- tagpaths + annotation_north_arrow(location = "tr", which_north = "true") + geom_spatial_point(aes(x, y), crs = 4326) +
   #annotation_scale(location = "tl") +
@@ -138,12 +139,12 @@ ggsave("mobula_tag_map_July29_2024.jpg")
 #help(annotation_scale)
 ```
 
-#Subset tag data by species and/or tag to get maps of tags with corresponding depth data.
+#Subset tags by species or tag for mapping
 ```{r}
 Manta <-mobula_tags %>% filter(Species == "M birostris")
 Tarapacana <-mobula_tags %>% filter(Species == "M tarapacana")
 #Mobular <-mobula_tags %>% filter(Species == "M mobular")
-Mobular_234811 <-mobula_tags %>% filter(Tag_ID == 234811)
+Mobular<-mobula_tags %>% filter(Ptt == 234811)
 Thurstoni <-mobula_tags %>% filter(Species == "M thurstoni")
 #Thurstoni <-mobula_tags %>% filter(Tag_PTT == 234821|Tag_PTT == 234820)
 ```
@@ -155,19 +156,19 @@ ggsave("Manta_path.jpg")
 
 ```{r}
 Tarapacana_path <- HIbasemap + geom_segment(aes(x = Deploy_long, y = Deploy_lat, xend = Popoff_long, yend = Popoff_lat, colour = Species), arrow = arrow(angle = 30, length = unit(0.2, "cm"), ends = "last", type = "open"), data = Tarapacana)
-ggsave("Tarapacana_path_path.jpg") 
+ggsave("Tarapacana_path.jpg") 
 ```
 
 ```{r}
-Mobular_234811_path <- HIbasemap + geom_segment(aes(x = Deploy_long, y = Deploy_lat, xend = Popoff_long, yend = Popoff_lat, colour = Species), arrow = arrow(angle = 30, length = unit(0.2, "cm"), ends = "last", type = "open"), data = Mobular_234811)
+Mobular_234811_path <- HIbasemap + geom_segment(aes(x = Deploy_long, y = Deploy_lat, xend = Popoff_long, yend = Popoff_lat, colour = Species), arrow = arrow(angle = 30, length = unit(0.2, "cm"), ends = "last", type = "open"), data = Mobular)
 ggsave("Mobular_234811_path.jpg")
 
-#This has release info for both tags and recovery for one that survived.
+#The below code has release info for both tags and recovery for one that survived.
 #Mobular_path <- HIbasemap + geom_point(data=Mobular, aes(Deploy_long, Deploy_lat), colour = "yellow") + geom_segment(aes(x = Deploy_long, y = Deploy_lat, xend = Popoff_long, yend = Popoff_lat, colour = Tag_ID), arrow = arrow(angle = 30, length = unit(0.2, "cm"), ends = "last", type = "open"), data=Mobular)
 ```
 
 ```{r}
-Thurstoni_path <- HIbasemap + geom_segment(aes(x = Deploy_long, y = Deploy_lat, xend = Popoff_long, yend = Popoff_lat, colour = Tag_ID), arrow = arrow(angle = 30, length = unit(0.2, "cm"), ends = "last", type = "open"), data =Thurstoni)
+Thurstoni_path <- HIbasemap + geom_segment(aes(x = Deploy_long, y = Deploy_lat, xend = Popoff_long, yend = Popoff_lat, colour = Ptt), arrow = arrow(angle = 30, length = unit(0.2, "cm"), ends = "last", type = "open"), data =Thurstoni)
 ggsave("Thurstoni_path.jpg")
 
 #This adds the release locations as points.
