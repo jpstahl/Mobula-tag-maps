@@ -123,7 +123,7 @@ annotation_north_arrow(location = "br", which_north = "true") # this is the arro
 #adds north arrow. 
 tag_map_with_elements <- tagpaths + annotation_north_arrow(location = "bl", which_north = "true")
 tag_map_with_elements
-ggsave("mobula_tag_map_July29_2024.jpg") 
+ggsave("mobula_tag_map_with_arrow.jpg") 
 #help(annotation_north_arrow)
 ```
 
