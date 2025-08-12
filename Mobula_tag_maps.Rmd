@@ -38,7 +38,7 @@ library(cowplot) #for insert map
 ###Register google key 
 
 ```{r include=FALSE, warning=FALSE}
-map_key <-read.csv(file="C:/R_git_stuff/Mobula-tag-maps/Map_key.csv", header=TRUE, sep=",")
+map_key <-read.csv(file="D:/R stuff/R git/Mobula-tag-maps/Map_key.csv", header=TRUE, sep=",")
 register_google(key = map_key$Key) 
 ```
 ### Import map of Pacific centered on Hawaii.
@@ -68,7 +68,7 @@ HIbasemap
 ```
 
 ```{r}
-mobula_tags <-read.csv(file="C:/R_git_stuff/Mobula-tag-maps/Mobula_locations.csv", header=TRUE, sep=",")
+mobula_tags <-read.csv(file="D:/R stuff/R git/Mobula-tag-maps/Mobula_locations.csv", header=TRUE, sep=",")
 #head(mobula_tags)
 #glimpse(mobula_tags)
 #dim(mobula_tags) #8x12
@@ -76,10 +76,10 @@ mobula_tags <-read.csv(file="C:/R_git_stuff/Mobula-tag-maps/Mobula_locations.csv
 
 #Change Tag_ID to character so can use this field to color different tag paths on the map
 ```{r}
-mobula_tags$Ptt <- as.character(mobula_tags$Ptt)
+mobula_tags$Tag_Ptt <- as.character(mobula_tags$Tag_PTT)
 ```
 
-##Map tag data.
+##Map tag data
 ###First map tag releases and recoveries as point data and look for outliers.
 ```{r map tag points}
 tag_rel <- HIbasemap + geom_point(data = mobula_tags, aes(Deploy_long, Deploy_lat), colour = "yellow")
@@ -96,17 +96,34 @@ tag_rec
 mobula_tags$Popoff_long[which(mobula_tags$Popoff_long>0)] <- -360 + (mobula_tags$Popoff_long[which(mobula_tags$Popoff_long>0)])
 ```
 
+```{r}
+selected_tags <- c("234813", "234819", "234810")  
+
+mobula_map <- HIbasemap + 
+  geom_point(
+    data = subset(mobula_tags, Tag_PTT %in% selected_tags), 
+    aes(Deploy_long, Deploy_lat, colour = Species), 
+  ) + 
+  geom_segment(
+    aes(x = Deploy_long, y = Deploy_lat, xend = Popoff_long, yend = Popoff_lat, colour = Species),
+    arrow = arrow(angle = 30, length = unit(0.2, "cm"), ends = "last", type = "open"),
+   linewidth = 0.75,
+    data = mobula_tags
+  )
+ggsave("mobula_tag_map_by_species_aug12_25.jpg") 
+```
+
 #Tag map by species
 ###Map tag paths from release to recovery with release locations. (use this if want to map tags still at large)
 ```{r map tagpaths}
-tagpaths <- HIbasemap + geom_point(data = mobula_tags, aes(Deploy_long, Deploy_lat), colour = "yellow") + geom_segment(aes(x = Deploy_long, y = Deploy_lat, xend = Popoff_long, yend = Popoff_lat, colour = Species), arrow = arrow(angle = 30, length = unit(0.2, "cm"), ends = "last", type = "open"), data = mobula_tags)
+tagpaths <- HIbasemap + geom_point(data = mobula_tags, aes(Deploy_long, Deploy_lat), colour = "yellow") + geom_segment(aes(x = Deploy_long, y = Deploy_lat, xend = Popoff_long, yend = Popoff_lat, colour = Species), arrow = arrow(angle = 30, length = unit(0.2, "cm"), ends = "last", type = "open"), linewidth = 1, data = mobula_tags)
 tagpaths
 ggsave("mobula_tag_map_by_species.jpg") #
 ```
 
 ###Map tag paths only
 ```{r}
-tagpaths <- HIbasemap + geom_segment(aes(x = Deploy_long, y = Deploy_lat, xend = Popoff_long, yend = Popoff_lat, colour = Species), arrow = arrow(angle = 30, length = unit(0.2, "cm"), ends = "last", type = "open"), data = mobula_tags)
+tagpaths <- HIbasemap + geom_segment(aes(x = Deploy_long, y = Deploy_lat, xend = Popoff_long, yend = Popoff_lat, colour = Species), arrow = arrow(angle = 30, length = unit(0.2, "cm"), ends = "last", type = "open"), linewidth = 1, data = mobula_tags)
 tagpaths
 ggsave("mobula_tag_map_by_species_paths_only.jpg") 
 ```
@@ -121,7 +138,7 @@ annotation_north_arrow(location = "br", which_north = "true") # this is the arro
 ###north arrow
 ```{r}
 #adds north arrow. 
-tag_map_with_elements <- tagpaths + annotation_north_arrow(location = "bl", which_north = "true")
+tag_map_with_elements <- mobula_map + annotation_north_arrow(location = "bl", which_north = "true")
 tag_map_with_elements
 ggsave("mobula_tag_map_with_arrow.jpg") 
 #help(annotation_north_arrow)
