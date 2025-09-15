@@ -96,6 +96,7 @@ tag_rec
 mobula_tags$Popoff_long[which(mobula_tags$Popoff_long>0)] <- -360 + (mobula_tags$Popoff_long[which(mobula_tags$Popoff_long>0)])
 ```
 
+### Map tag paths with deploy locations only for tags with no recovery locations.
 ```{r}
 selected_tags <- c("234813", "234819", "234810")  
 
@@ -158,37 +159,85 @@ ggsave("mobula_tag_map_with_arrow.jpg")
 
 #Subset tags by species or tag for mapping
 ```{r}
-Manta <-mobula_tags %>% filter(Species == "M birostris")
-Tarapacana <-mobula_tags %>% filter(Species == "M tarapacana")
-#Mobular <-mobula_tags %>% filter(Species == "M mobular")
-Mobular<-mobula_tags %>% filter(Ptt == 234811)
-Thurstoni <-mobula_tags %>% filter(Species == "M thurstoni")
+selected_tags <- c("234813", "234819", "234810")  
+
+Manta <-mobula_tags %>% filter(Species == "M. birostris")
+Tarapacana <-mobula_tags %>% filter(Species == "M. tarapacana")
+Mobular <-mobula_tags %>% filter(Species == "M. mobular")
+#Mobular<-mobula_tags %>% filter(Ptt == 234811)
+Thurstoni <-mobula_tags %>% filter(Species == "M. thurstoni")
 #Thurstoni <-mobula_tags %>% filter(Tag_PTT == 234821|Tag_PTT == 234820)
 ```
 
 ```{r}
-Manta_path <- HIbasemap + geom_segment(aes(x = Deploy_long, y = Deploy_lat, xend = Popoff_long, yend = Popoff_lat, colour = Species), arrow = arrow(angle = 30, length = unit(0.2, "cm"), ends = "last", type = "open"), data = Manta)
-ggsave("Manta_path.jpg") 
+selected_manta <- c("234810") 
+
+Manta_paths <- HIbasemap + 
+  geom_point(
+    data = subset(mobula_tags, Tag_PTT %in% selected_manta), 
+    aes(Deploy_long, Deploy_lat, colour = Species), 
+  ) + 
+
+  geom_segment(aes(x = Deploy_long, y = Deploy_lat, xend = Popoff_long, yend = Popoff_lat, colour = Species), arrow = arrow(angle = 30, length = unit(0.2, "cm"), ends = "last", type = "open"), data = Manta) +
+  geom_text(
+    data = subset(mobula_tags, Tag_PTT %in% selected_manta),
+    aes(Deploy_long, Deploy_lat, label = str_sub(Tag_PTT, -3, -1)),
+    vjust = -1, size = 3, color = "white"
+  ) +
+  # Label at pop-off location
+  geom_text(
+    data = Manta,
+    aes(Popoff_long, Popoff_lat, label = str_sub(Tag_PTT, -3, -1)),
+    vjust = -1, size = 3, color = "white"
+  )
+
+ggsave("Manta_paths.jpg") 
 ```
 
 ```{r}
-Tarapacana_path <- HIbasemap + geom_segment(aes(x = Deploy_long, y = Deploy_lat, xend = Popoff_long, yend = Popoff_lat, colour = Species), arrow = arrow(angle = 30, length = unit(0.2, "cm"), ends = "last", type = "open"), data = Tarapacana)
-ggsave("Tarapacana_path.jpg") 
+Tarapacana_paths <- HIbasemap + 
+  geom_segment(aes(x = Deploy_long, y = Deploy_lat, xend = Popoff_long, yend = Popoff_lat, colour = Species), arrow = arrow(angle = 30, length = unit(0.2, "cm"), ends = "last", type = "open"), data = Tarapacana) +
+   geom_text(
+    data = Tarapacana,
+    aes(Popoff_long, Popoff_lat, label = str_sub(Tag_PTT, -3, -1)),
+    vjust = 1.5, hjust = 0.5, size = 3, color = "white")
+ggsave("Tarapacana_paths.jpg") 
 ```
 
 ```{r}
-Mobular_234811_path <- HIbasemap + geom_segment(aes(x = Deploy_long, y = Deploy_lat, xend = Popoff_long, yend = Popoff_lat, colour = Species), arrow = arrow(angle = 30, length = unit(0.2, "cm"), ends = "last", type = "open"), data = Mobular)
-ggsave("Mobular_234811_path.jpg")
+selected_mobular <- c("234813", "234819") 
+
+Mobular_paths <- HIbasemap + 
+  geom_point(
+    data = subset(mobula_tags, Tag_PTT %in% selected_mobular), 
+    aes(Deploy_long, Deploy_lat, colour = Species), 
+  ) + 
+  geom_segment(aes(x = Deploy_long, y = Deploy_lat, xend = Popoff_long, yend = Popoff_lat, colour = Species), arrow = arrow(angle = 30, length = unit(0.2, "cm"), ends = "last", type = "open"), data = Mobular) +
+  geom_text(
+    data = subset(mobula_tags, Tag_PTT %in% selected_mobular),
+    aes(Deploy_long, Deploy_lat, label = str_sub(Tag_PTT, -3, -1)),
+    vjust = -1, size = 3, color = "white"
+  ) +
+ geom_text(
+    data = Mobular,
+    aes(Popoff_long, Popoff_lat, label = str_sub(Tag_PTT, -3, -1)),
+    vjust = 1.5, hjust = 0.5, size = 3, color = "white")
+ggsave("Mobular_paths.jpg")
 
 #The below code has release info for both tags and recovery for one that survived.
 #Mobular_path <- HIbasemap + geom_point(data=Mobular, aes(Deploy_long, Deploy_lat), colour = "yellow") + geom_segment(aes(x = Deploy_long, y = Deploy_lat, xend = Popoff_long, yend = Popoff_lat, colour = Tag_ID), arrow = arrow(angle = 30, length = unit(0.2, "cm"), ends = "last", type = "open"), data=Mobular)
 ```
 
 ```{r}
-Thurstoni_path <- HIbasemap + geom_segment(aes(x = Deploy_long, y = Deploy_lat, xend = Popoff_long, yend = Popoff_lat, colour = Ptt), arrow = arrow(angle = 30, length = unit(0.2, "cm"), ends = "last", type = "open"), data =Thurstoni)
-ggsave("Thurstoni_path.jpg")
+Thurstoni_paths <- HIbasemap + 
+  geom_segment(aes(x = Deploy_long, y = Deploy_lat, xend = Popoff_long, yend = Popoff_lat, colour = Species), arrow = arrow(angle = 30, length = unit(0.2, "cm"), ends = "last", type = "open"), data =Thurstoni) +
+geom_text(
+    data = Thurstoni,
+    aes(Popoff_long, Popoff_lat, label = str_sub(Tag_PTT, -3, -1)),
+    vjust = -0.75, hjust = 0.5, size = 3, color = "white")
+
+ggsave("Thurstoni_paths.jpg")
 
 #This adds the release locations as points.
 #Thurstoni_path <- HIbasemap + geom_point(data = Thurstoni, aes(Deploy_long, Deploy_lat), colour = "yellow") + geom_segment(aes(x = Deploy_long, y = Deploy_lat, xend = Popoff_long, yend = Popoff_lat, colour = Tag_ID), arrow = arrow(angle = 30, length = unit(0.2, "cm"), ends = "last", type = "open"), data =Thurstoni)
 ```
-
