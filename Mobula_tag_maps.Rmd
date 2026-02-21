@@ -38,7 +38,8 @@ library(cowplot) #for insert map
 ###Register google key 
 
 ```{r include=FALSE, warning=FALSE}
-map_key <-read.csv(file="D:/R stuff/R git/Mobula-tag-maps/Map_key.csv", header=TRUE, sep=",")
+# map_key <-read.csv(file="D:/R stuff/R git/Mobula-tag-maps/Map_key.csv", header=TRUE, sep=",")
+map_key <-read.csv(file="C:/R stuff/R enterprise/Map_key.csv", header=TRUE, sep=",")
 register_google(key = map_key$Key) 
 ```
 ### Import map of Pacific centered on Hawaii.
@@ -68,7 +69,9 @@ HIbasemap
 ```
 
 ```{r}
-mobula_tags <-read.csv(file="D:/R stuff/R git/Mobula-tag-maps/Mobula_locations.csv", header=TRUE, sep=",")
+# mobula_tags <-read.csv(file="D:/R stuff/R git/Mobula-tag-maps/Mobula_locations.csv", header=TRUE, sep=",")
+
+mobula_tags <-read.csv(file="C:/R stuff/Mobula-tag-maps/Mobula_locations.csv", header=TRUE, sep=",")
 #head(mobula_tags)
 #glimpse(mobula_tags)
 #dim(mobula_tags) #8x12
@@ -87,7 +90,7 @@ tag_rel
 
 tag_rec <- HIbasemap + geom_point(data = mobula_tags, aes(Popoff_long, Popoff_lat), colour = "red")
 tag_rec 
-#Note some tags may not display. Tags with no popoff lat/long (mortalities or tags at large). If tags are in eastern hemisphere then will need to run below code to scale map from 0-360 degrees and then rerun this code. Also tags may not display if they are out of the map bounds.
+#Note some tags may not display. Tags with no popoff lat/long (mortalities or tags at large). If tags are in eastern hemisphere then will need to run below code to scale map from 0-360 degrees and then rerun this code. Also tags may not display if they are out of the map bounds. We had 3 with no popoff locations.
 ```
 
 ###Ggplot maps on a 0-360 scale so does not change to positive 180 when crossing the antimeridian. 
@@ -111,7 +114,7 @@ mobula_map <- HIbasemap +
    linewidth = 0.75,
     data = mobula_tags
   )
-ggsave("mobula_tag_map_by_species_aug12_25.jpg") 
+ggsave("mobula_tag_map_by_species_Feb_20_2026.jpg") 
 ```
 
 #Tag map by species
